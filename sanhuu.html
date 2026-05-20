@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>⚡ Хурдан Ухаан — Санхүүгийн хурдны тэмцээн</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08091A;
+  --bg2:#0F1128;
+  --bg3:#171A38;
+  --line:#252850;
+  --ink:#ECF0FF;
+  --ink2:#8890B8;
+  --ink3:#454A72;
+  --yellow:#FFD600;
+  --yellow2:#FFE866;
+  --green:#00E87A;
+  --red:#FF3355;
+  --blue:#00C8FF;
+  --purple:#B17DFF;
+  --orange:#FF8C40;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'Manrope',sans-serif;overflow:hidden}
+
+/* === BG === */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%,rgba(255,214,0,.07),transparent),
+    radial-gradient(ellipse 60% 60% at 100% 100%,rgba(177,125,255,.06),transparent),
+    radial-gradient(ellipse 50% 50% at 0% 100%,rgba(0,200,255,.05),transparent);
+}
+/* grid lines */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.04;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+
+/* === SCREENS === */
+.screen{
+  position:fixed;inset:0;z-index:10;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:24px;text-align:center;
+}
+.screen.hidden{display:none!important}
+
+/* =============== INTRO =============== */
+#intro{gap:0}
+.intro-bolt{font-size:clamp(80px,15vw,160px);line-height:1;margin-bottom:20px;
+  animation:boltPulse 2s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(255,214,0,.5))}
+@keyframes boltPulse{0%,100%{transform:scale(1) rotate(-5deg)}50%{transform:scale(1.08) rotate(-5deg)}}
+.intro-title{
+  font-size:clamp(52px,9vw,120px);font-weight:900;line-height:.92;
+  letter-spacing:-.035em;margin-bottom:16px;
+  background:linear-gradient(135deg,var(--yellow2) 0%,var(--yellow) 50%,var(--orange) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.intro-sub{font-size:clamp(15px,2.5vw,22px);color:var(--ink2);font-weight:600;
+  letter-spacing:.05em;text-transform:uppercase;margin-bottom:48px}
+.intro-meta{
+  display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:52px;
+}
+.meta-chip{
+  background:var(--bg3);border:1px solid var(--line);padding:10px 20px;
+  border-radius:99px;font-family:'JetBrains Mono';font-size:13px;color:var(--ink2);font-weight:700;
+  letter-spacing:.05em;display:flex;align-items:center;gap:8px;
+}
+.meta-chip .ic{font-size:16px}
+.play-btn{
+  position:relative;padding:22px 56px;font-family:'Manrope';font-size:20px;font-weight:900;
+  letter-spacing:.04em;border:none;cursor:pointer;border-radius:16px;overflow:hidden;
+  background:linear-gradient(135deg,var(--yellow),var(--orange));color:#0B0D1F;
+  transition:all .25s cubic-bezier(.2,.8,.2,1);text-transform:uppercase;
+  box-shadow:0 0 0 0 rgba(255,214,0,.4);
+}
+.play-btn:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 20px 50px -10px rgba(255,140,64,.6),0 0 0 8px rgba(255,214,0,.1)}
+.play-btn:active{transform:scale(.98)}
+.play-btn::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.25),transparent);
+}
+
+/* =============== COUNTDOWN =============== */
+#countdown .cd-num{
+  font-size:clamp(140px,28vw,280px);font-weight:900;letter-spacing:-.05em;line-height:1;
+  background:linear-gradient(180deg,var(--yellow2),var(--yellow));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:cdPop .8s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes cdPop{from{transform:scale(1.8);opacity:0}to{transform:scale(1);opacity:1}}
+#countdown .cd-go{
+  font-size:clamp(80px,16vw,160px);font-weight:900;letter-spacing:-.03em;
+  background:linear-gradient(135deg,var(--green),var(--blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:cdPop .5s ease;
+}
+
+/* =============== GAME =============== */
+#game{
+  justify-content:flex-start;padding:20px;gap:0;max-width:900px;margin:0 auto;
+  position:fixed;inset:0;z-index:10;
+}
+
+/* Top HUD */
+.hud{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;width:100%;margin-bottom:14px}
+.lives{display:flex;gap:6px;align-items:center}
+.heart{font-size:26px;transition:all .3s;filter:drop-shadow(0 0 8px rgba(255,51,85,.6))}
+.heart.dead{filter:none;opacity:.25;transform:scale(.8)}
+.hud-score{
+  font-family:'JetBrains Mono';font-size:28px;font-weight:700;color:var(--yellow);
+  letter-spacing:-.02em;text-align:center;text-shadow:0 0 20px rgba(255,214,0,.4);
+  transition:transform .15s;
+}
+.hud-score.bump{transform:scale(1.2)}
+.streak-wrap{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.streak{
+  font-family:'JetBrains Mono';font-size:14px;font-weight:700;padding:6px 14px;
+  border-radius:99px;background:var(--bg3);border:1.5px solid var(--line);
+  color:var(--ink2);transition:all .3s;white-space:nowrap;
+}
+.streak.hot{background:rgba(255,140,64,.15);border-color:var(--orange);color:var(--orange);
+  animation:streakPulse 1s ease infinite}
+@keyframes streakPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,140,64,.4)}50%{box-shadow:0 0 0 6px rgba(255,140,64,0)}}
+
+/* Timer */
+.timer-track{width:100%;height:10px;background:var(--bg3);border-radius:5px;overflow:hidden;margin-bottom:18px;position:relative}
+.timer-bar{
+  height:100%;width:100%;border-radius:5px;transition:width .1s linear,background .5s;
+  background:linear-gradient(90deg,var(--green),var(--blue));
+  box-shadow:0 0 12px rgba(0,232,122,.5);
+}
+.timer-bar.warn{background:linear-gradient(90deg,var(--orange),var(--yellow));box-shadow:0 0 12px rgba(255,140,64,.5)}
+.timer-bar.danger{background:var(--red);box-shadow:0 0 12px rgba(255,51,85,.6);animation:dangerPulse .4s ease infinite}
+@keyframes dangerPulse{0%,100%{opacity:1}50%{opacity:.6}}
+.timer-label{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font-family:'JetBrains Mono';font-size:11px;font-weight:700;color:white;opacity:.9;
+}
+
+/* Question area */
+.q-wrap{
+  background:var(--bg2);border:1.5px solid var(--line);border-radius:20px;
+  padding:28px 32px;width:100%;margin-bottom:16px;position:relative;overflow:hidden;
+}
+.q-wrap::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--yellow),var(--orange));
+}
+.q-category{
+  display:inline-flex;align-items:center;gap:7px;padding:5px 14px;border-radius:99px;
+  font-family:'JetBrains Mono';font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:16px;
+}
+.cat-0{background:rgba(255,214,0,.12);color:var(--yellow);border:1px solid rgba(255,214,0,.25)}
+.cat-1{background:rgba(0,200,255,.12);color:var(--blue);border:1px solid rgba(0,200,255,.25)}
+.cat-2{background:rgba(0,232,122,.12);color:var(--green);border:1px solid rgba(0,232,122,.25)}
+.cat-3{background:rgba(177,125,255,.12);color:var(--purple);border:1px solid rgba(177,125,255,.25)}
+.q-num{
+  font-family:'JetBrains Mono';font-size:11px;color:var(--ink3);float:right;
+  margin-top:2px;font-weight:700;
+}
+.q-text{
+  font-size:clamp(16px,2.8vw,22px);font-weight:700;line-height:1.45;color:var(--ink);
+  letter-spacing:-.01em;clear:both;
+}
+.q-text .highlight{color:var(--yellow);font-family:'JetBrains Mono'}
+
+/* Answers */
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.ans-btn{
+  position:relative;padding:18px 20px;border-radius:14px;cursor:pointer;
+  background:var(--bg2);border:1.5px solid var(--line);text-align:left;
+  transition:all .2s cubic-bezier(.2,.8,.2,1);display:flex;align-items:flex-start;gap:14px;
+  overflow:hidden;
+}
+.ans-btn::before{
+  content:"";position:absolute;inset:0;opacity:0;
+  background:linear-gradient(135deg,rgba(255,214,0,.06),transparent);
+  transition:opacity .2s;
+}
+.ans-btn:focus{outline:none}
+/* Only show yellow hover on real pointer devices (mouse), not touch */
+@media(hover:hover) and (pointer:fine){
+  .ans-btn:hover:not(:disabled){border-color:var(--yellow);transform:translateY(-2px);box-shadow:0 8px 24px -8px rgba(255,214,0,.2)}
+  .ans-btn:hover::before{opacity:1}
+}
+.ans-btn:disabled{cursor:not-allowed}
+.ans-btn.correct{background:rgba(0,232,122,.12);border-color:var(--green)!important;transform:translateY(-2px)}
+.ans-btn.correct .ans-letter{background:var(--green);color:#0B0D1F}
+.ans-btn.wrong{background:rgba(255,51,85,.1);border-color:var(--red)!important}
+.ans-btn.wrong .ans-letter{background:var(--red)}
+.ans-letter{
+  width:34px;height:34px;min-width:34px;border-radius:10px;
+  background:var(--bg3);border:1.5px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono';font-size:13px;font-weight:700;color:var(--ink2);
+  transition:all .2s;flex-shrink:0;margin-top:1px;
+}
+.ans-text{font-size:clamp(13px,1.8vw,16px);font-weight:600;color:var(--ink);line-height:1.4}
+
+/* Feedback overlay */
+.feedback-flash{
+  position:fixed;inset:0;z-index:20;pointer-events:none;opacity:0;
+  transition:opacity .15s;
+}
+.feedback-flash.correct{background:rgba(0,232,122,.12)}
+.feedback-flash.wrong{background:rgba(255,51,85,.12)}
+.feedback-flash.show{opacity:1}
+
+/* Floating score */
+.float-score{
+  position:fixed;font-family:'JetBrains Mono';font-size:22px;font-weight:700;
+  z-index:30;pointer-events:none;animation:floatScore 1.4s ease-out forwards;
+}
+.float-score.pos{color:var(--green);text-shadow:0 0 20px rgba(0,232,122,.6)}
+.float-score.neg{color:var(--red)}
+@keyframes floatScore{
+  0%{opacity:0;transform:translateY(0) scale(.8)}
+  20%{opacity:1;transform:translateY(-10px) scale(1.1)}
+  100%{opacity:0;transform:translateY(-60px) scale(.9)}
+}
+
+/* Combo banner */
+.combo-banner{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:25;pointer-events:none;
+  background:var(--bg2);border:2px solid var(--yellow);border-radius:20px;
+  padding:20px 40px;text-align:center;transition:all .35s cubic-bezier(.2,.8,.2,1);
+  box-shadow:0 0 60px rgba(255,214,0,.3);
+}
+.combo-banner.show{transform:translate(-50%,-50%) scale(1)}
+.combo-banner .cb-em{font-size:44px;line-height:1;margin-bottom:8px}
+.combo-banner .cb-text{font-size:22px;font-weight:900;letter-spacing:-.01em;color:var(--yellow)}
+.combo-banner .cb-sub{font-size:13px;color:var(--ink2);font-weight:600;margin-top:4px}
+
+/* Explanation */
+.explanation{
+  margin-top:14px;padding:14px 18px;background:rgba(0,200,255,.08);border:1px solid rgba(0,200,255,.2);
+  border-radius:12px;font-size:13px;color:var(--blue);font-weight:600;line-height:1.5;display:none;
+  animation:fadeUp .3s ease;
+}
+.explanation.show{display:block}
+.explanation .ex-title{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ink3);margin-bottom:6px;display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* =============== END =============== */
+#end{
+  justify-content:flex-start;padding:20px;gap:0;
+  overflow-y:auto;align-items:center;
+}
+#end::-webkit-scrollbar{width:6px}
+#end::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+.end-grid{max-width:780px;width:100%;padding-bottom:12px}
+.end-top{display:flex;align-items:center;gap:20px;margin-bottom:16px}
+.end-rank{
+  font-size:clamp(72px,16vw,130px);font-weight:900;line-height:1;
+  letter-spacing:-.04em;flex-shrink:0;
+  animation:rankPop .8s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes rankPop{from{transform:scale(2) rotate(-10deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+.rank-S{background:linear-gradient(135deg,#FFD600,#FF8C40);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.rank-A{background:linear-gradient(135deg,#00E87A,#00C8FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.rank-B{background:linear-gradient(135deg,#B17DFF,#00C8FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.rank-C{color:var(--orange)}
+.rank-D{color:var(--ink2)}
+.end-right{flex:1;min-width:0}
+.end-title{font-size:clamp(16px,3vw,26px);font-weight:800;margin-bottom:8px;letter-spacing:-.02em;line-height:1.2}
+.end-badge{
+  display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:99px;
+  font-size:13px;font-weight:700;letter-spacing:.02em;margin-top:4px;
+}
+.badge-S{background:rgba(255,214,0,.15);border:1px solid rgba(255,214,0,.3);color:var(--yellow)}
+.badge-A{background:rgba(0,232,122,.12);border:1px solid rgba(0,232,122,.25);color:var(--green)}
+.badge-B{background:rgba(177,125,255,.12);border:1px solid rgba(177,125,255,.25);color:var(--purple)}
+.badge-C{background:rgba(255,140,64,.12);border:1px solid rgba(255,140,64,.25);color:var(--orange)}
+.badge-D{background:var(--bg3);border:1px solid var(--line);color:var(--ink2)}
+.end-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;margin-bottom:10px;
+}
+.end-stat{background:var(--bg2);border:1.5px solid var(--line);border-radius:12px;padding:12px;text-align:center}
+.end-stat .es-val{font-family:'JetBrains Mono';font-size:22px;font-weight:700;color:var(--yellow);margin-bottom:4px;display:block}
+.end-stat .es-lab{font-size:10px;color:var(--ink2);font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.end-lessons{
+  background:var(--bg2);border:1.5px solid var(--line);border-radius:12px;
+  padding:14px 18px;width:100%;margin-bottom:12px;text-align:left;
+}
+.end-lessons h4{font-size:11px;font-family:'JetBrains Mono';color:var(--ink2);letter-spacing:.15em;
+  text-transform:uppercase;margin-bottom:10px}
+.lesson-row{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);
+  font-size:13px;color:var(--ink2);font-weight:600;align-items:flex-start;line-height:1.4}
+.lesson-row:last-child{border-bottom:none}
+.lesson-row .icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.lesson-row b{color:var(--ink)}
+.btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.replay-btn{
+  padding:14px 28px;background:linear-gradient(135deg,var(--yellow),var(--orange));color:#0B0D1F;
+  border:none;border-radius:12px;font-family:'Manrope';font-size:15px;font-weight:900;
+  cursor:pointer;transition:all .25s;letter-spacing:.02em;text-transform:uppercase;
+}
+.replay-btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px -6px rgba(255,140,64,.5)}
+.share-btn{
+  padding:14px 18px;background:transparent;border:1.5px solid var(--line);color:var(--ink2);
+  border-radius:12px;font-family:'Manrope';font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;
+}
+.share-btn:hover{border-color:var(--yellow);color:var(--yellow)}
+
+/* Name input */
+.name-wrap{margin-bottom:24px;width:100%;max-width:360px}
+.name-input{
+  width:100%;padding:16px 24px;border-radius:14px;border:2px solid var(--line);
+  background:var(--bg2);color:var(--ink);font-family:'Manrope';font-size:18px;font-weight:700;
+  outline:none;text-align:center;transition:border .2s;
+}
+.name-input:focus{border-color:var(--yellow)}
+.name-input::placeholder{color:var(--ink3);font-weight:500}
+
+/* Intro buttons row */
+.intro-btns{display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:center}
+.archive-btn{
+  padding:18px 28px;background:var(--bg2);border:2px solid var(--line);color:var(--ink2);
+  border-radius:14px;font-family:'Manrope';font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .2s;
+}
+.archive-btn:hover{border-color:var(--yellow);color:var(--yellow)}
+
+/* Archive modal */
+.arc-overlay{
+  position:fixed;inset:0;background:rgba(8,9,26,.85);backdrop-filter:blur(8px);
+  z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;
+  animation:fadeIn .3s ease;
+}
+.arc-overlay.hidden{display:none}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.arc-card{
+  background:var(--bg2);border:1.5px solid var(--line);border-radius:24px;
+  max-width:700px;width:100%;max-height:86vh;display:flex;flex-direction:column;
+  box-shadow:0 40px 80px -20px rgba(0,0,0,.7);overflow:hidden;
+}
+.arc-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:24px 28px;border-bottom:1.5px solid var(--line);flex-shrink:0;
+}
+.arc-title{font-size:22px;font-weight:800;letter-spacing:-.01em}
+.arc-close{
+  background:var(--bg3);border:none;color:var(--ink2);font-size:22px;
+  width:40px;height:40px;border-radius:50%;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;font-weight:700;
+}
+.arc-close:hover{background:var(--red);color:white;transform:rotate(90deg)}
+.arc-body{overflow-y:auto;flex:1;padding:20px 28px}
+.arc-body::-webkit-scrollbar{width:6px}
+.arc-body::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+.arc-empty{text-align:center;padding:48px 24px;color:var(--ink2);font-size:15px;font-weight:600}
+.arc-empty .em{font-size:48px;margin-bottom:14px;display:block}
+
+/* Archive table rows */
+.arc-row{
+  display:grid;grid-template-columns:32px 1fr auto auto auto;gap:12px;
+  align-items:center;padding:14px 0;border-bottom:1px solid var(--line);
+}
+.arc-row:last-child{border-bottom:none}
+.arc-pos{font-family:'JetBrains Mono';font-size:12px;color:var(--ink3);font-weight:700;text-align:center}
+.arc-pos.top1{color:var(--yellow)}
+.arc-pos.top2{color:#C0C0C0}
+.arc-pos.top3{color:#CD7F32}
+.arc-name{font-weight:700;font-size:15px}
+.arc-date{font-family:'JetBrains Mono';font-size:11px;color:var(--ink3);font-weight:600}
+.arc-correct{font-family:'JetBrains Mono';font-size:12px;color:var(--ink2);font-weight:700}
+.arc-score-col{font-family:'JetBrains Mono';font-size:16px;font-weight:700;color:var(--yellow);text-align:right}
+.arc-rank-col{
+  font-family:'JetBrains Mono';font-size:14px;font-weight:700;
+  width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+}
+.arc-rank-col.rS{background:rgba(255,214,0,.15);color:var(--yellow)}
+.arc-rank-col.rA{background:rgba(0,232,122,.12);color:var(--green)}
+.arc-rank-col.rB{background:rgba(177,125,255,.12);color:var(--purple)}
+.arc-rank-col.rC{background:rgba(255,140,64,.12);color:var(--orange)}
+.arc-rank-col.rD{background:var(--bg3);color:var(--ink2)}
+
+.arc-clear{
+  margin:16px 28px 20px;padding:12px;border:1.5px solid var(--line);
+  background:transparent;color:var(--ink2);border-radius:12px;cursor:pointer;
+  font-family:'Manrope';font-size:13px;font-weight:700;transition:all .2s;
+}
+.arc-clear:hover{border-color:var(--red);color:var(--red)}
+
+/* Responsive */
+@media(max-width:640px){
+  #game{padding:12px}
+  .answers{grid-template-columns:1fr}
+  .q-wrap{padding:18px 20px}
+  .end-stats{grid-template-columns:1fr 1fr}
+  .intro-meta{flex-direction:column;align-items:center;gap:10px}
+}
+@media(max-height:700px){
+  .intro-bolt{font-size:60px;margin-bottom:10px}
+  .intro-meta{display:none}
+  .answers{gap:8px}
+  .ans-btn{padding:12px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ======== INTRO ======== -->
+<div class="screen" id="intro">
+  <div class="intro-bolt">⚡</div>
+  <h1 class="intro-title">ХУРДАН<br>УХААН</h1>
+  <p class="intro-sub">Санхүүгийн хурдны тэмцээн</p>
+  <div class="intro-meta">
+    <div class="meta-chip"><span class="ic">📋</span>25 асуулт</div>
+    <div class="meta-chip"><span class="ic">⏱️</span>40 секунд/асуулт</div>
+    <div class="meta-chip"><span class="ic">❤️</span>3 амь</div>
+    <div class="meta-chip"><span class="ic">🏆</span>S / A / B / C / D</div>
+  </div>
+  <div class="name-wrap">
+    <input class="name-input" id="player-name" type="text" placeholder="Нэрээ оруулна уу…" maxlength="20" autocomplete="off">
+  </div>
+  <div class="intro-btns">
+    <button class="play-btn" onclick="tryStart()">ТОГЛООМ ЭХЛЭХ</button>
+    <button class="archive-btn" onclick="openArchive()">📁 АРХИВ</button>
+  </div>
+</div>
+
+<!-- ======== COUNTDOWN ======== -->
+<div class="screen hidden" id="countdown">
+  <div id="cd-display" class="cd-num">3</div>
+</div>
+
+<!-- ======== GAME ======== -->
+<div class="screen hidden" id="game">
+  <!-- HUD -->
+  <div class="hud">
+    <div class="lives" id="lives"></div>
+    <div class="hud-score" id="hud-score">0</div>
+    <div class="streak-wrap">
+      <div class="streak" id="streak-display">🔥 0 цуваа</div>
+    </div>
+  </div>
+  <!-- Timer -->
+  <div class="timer-track">
+    <div class="timer-bar" id="timer-bar"></div>
+    <span class="timer-label" id="timer-label">15</span>
+  </div>
+  <!-- Question -->
+  <div class="q-wrap">
+    <span class="q-num" id="q-num">1/25</span>
+    <div class="q-category" id="q-cat"></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="explanation" id="explanation">
+      <span class="ex-title">💡 Тайлбар</span>
+      <span id="ex-text"></span>
+    </div>
+  </div>
+  <!-- Answers -->
+  <div class="answers" id="answers"></div>
+</div>
+
+<!-- ======== END ======== -->
+<div class="screen hidden" id="end">
+  <div class="end-grid">
+    <div class="end-top">
+      <div class="end-rank" id="end-rank">A</div>
+      <div class="end-right">
+        <div class="end-title" id="end-title">Сайн тоглолоо!</div>
+        <div class="end-badge" id="end-badge"></div>
+      </div>
+    </div>
+    <div class="end-stats">
+      <div class="end-stat"><span class="es-val" id="es-score">0</span><span class="es-lab">Оноо</span></div>
+      <div class="end-stat"><span class="es-val" id="es-correct">0/25</span><span class="es-lab">Зөв хариулт</span></div>
+      <div class="end-stat"><span class="es-val" id="es-streak">0</span><span class="es-lab">Урт цуваа</span></div>
+    </div>
+    <div class="end-lessons" id="end-lessons"></div>
+    <div class="btn-row">
+      <button class="replay-btn" onclick="restart()">ДАХИН ТОГЛОХ ↺</button>
+      <button class="share-btn" onclick="openArchive()">📁 АРХИВ</button>
+      <button class="share-btn" onclick="copyScore()">ХУУЛАХ 📋</button>
+    </div>
+  </div>
+</div>
+
+<!-- Feedback flash -->
+<div class="feedback-flash" id="flash"></div>
+<!-- Combo banner -->
+<div class="combo-banner" id="combo">
+  <div class="cb-em" id="combo-em"></div>
+  <div class="cb-text" id="combo-text"></div>
+  <div class="cb-sub" id="combo-sub"></div>
+</div>
+
+<!-- Archive modal -->
+<div class="arc-overlay hidden" id="arc-overlay" onclick="closeArchive(event)">
+  <div class="arc-card">
+    <div class="arc-head">
+      <h2 class="arc-title">📁 Онооны архив</h2>
+      <button class="arc-close" onclick="closeArchive()">×</button>
+    </div>
+    <div class="arc-body" id="arc-body"></div>
+    <button class="arc-clear" onclick="clearArchive()">🗑️ Архив цэвэрлэх</button>
+  </div>
+</div>
+
+<script>
+/* ===========================================
+   ХУРДАН УХААН — Quiz game
+   25 асуулт, 15 сек, 3 амь, streak системтэй
+=========================================== */
+
+const CATS = [
+  {id:0, name:'💰 Хадгаламж', cls:'cat-0'},
+  {id:1, name:'🧮 Тооцоо',    cls:'cat-1'},
+  {id:2, name:'🧠 Ухаалаг',   cls:'cat-2'},
+  {id:3, name:'🏛️ Мөнгийн ертөнц', cls:'cat-3'},
+];
+
+const QUESTIONS = [
+  // --- 💰 ХАДГАЛАМЖ ---
+  {
+    cat:0,
+    q:'Харилцах данс болон 24 сарын хугацаатай хадгаламжийн хамгийн гол ялгаа нь юу вэ?',
+    opts:['Харилцахаас хэдийд ч авч болно, хугацаатайгаас авах боломжгүй','Хоёул ижил хүүтэй','Харилцах данс зөвхөн ахмад настанд','Хугацаатайгаас ч авч болно'],
+    ans:0,
+    ex:'Харилцах данс — шингэн, хугацаатай — түгжигдсэн. Хугацаатайгаас дундаас нь авбал хүүгээ алдана.'
+  },
+  {
+    cat:0,
+    q:'24 сарын хугацаатай хадгаламжийн жилийн хүү ойролцоогоор хэд вэ?',
+    opts:['1.2%','5%','12.5%','30%'],
+    ans:2,
+    ex:'24 сарын хадгаламж хамгийн өндөр хүүтэй: ойролцоогоор 12.5%. Харилцах данс зөвхөн 1.2% байдаг.'
+  },
+  {
+    cat:0,
+    q:'Хугацаатай хадгаламжаас хугацаа дуусахаас өмнө мөнгийг авбал юу болдог вэ?',
+    opts:['Юу ч болохгүй','Хүүгийн нэг хэсэг эсвэл бүгдийг алдана','Данс хаагддаг','Монголбанк мэдэгддэг'],
+    ans:1,
+    ex:'Хугацаа дуусахаас өмнө авбал торгуультай — тооцсон хүүгийнхаа ихэнхийг алдаж болно.'
+  },
+  {
+    cat:0,
+    q:'Дараах хадгаламжуудыг хүүгээр нь эрэмбэлэхэд аль нь зөв вэ?',
+    opts:['Харилцах > Хугацаагүй > 12 сар','12 сар > Хугацаагүй > Харилцах','Хугацаагүй > Харилцах > 12 сар','Бүгд ижил хүүтэй'],
+    ans:1,
+    ex:'Урт хугацааны хадгаламж хамгийн өндөр хүүтэй: 12 сар (11.5%) > Хугацаагүй (5%) > Харилцах (1.2%)'
+  },
+  {
+    cat:0,
+    q:'"Хугацаагүй хадгаламж" гэж ямар данс вэ?',
+    opts:['Хугацаа огт байхгүй, зөвхөн жилд нэг удаа авна','Хэдийд ч орлого, зарлага хийж болох хадгаламж','Тухайн улирлаар хааддаг данс','Засгийн газрын тусгай хөтөлбөр'],
+    ans:1,
+    ex:'Хугацаагүй хадгаламж нь хэдийд ч авч болдог, жилд 5% хүртэл хүүтэй. Харилцахаас илүү хүүтэй ч шингэн хэвээр.'
+  },
+  {
+    cat:0,
+    q:'Яаралтай нөөц санг (гэнэтийн зардал) аль дансанд байлгах нь зохистой вэ?',
+    opts:['24 сарын хугацаатай','Харилцах эсвэл хугацаагүй хадгаламж','Гэртээ хамгаалалтгүй','12 сарын хугацаатай'],
+    ans:1,
+    ex:'Яаралтай мөнгө хэдийд ч авч чадах шингэн дансанд байх ёстой. Хугацаатайд хийвэл хэрэгтэй цагт нь авч чадахгүй.'
+  },
+
+  // --- 🧮 ТООЦОО ---
+  {
+    cat:1,
+    q:'500,000₮-г жилд 8%-ийн хүүтэй 6 сар хадгаллаа. Хүүний дүн хэд вэ?\n(I = P × R × T / 12)',
+    opts:['4,000₮','20,000₮','40,000₮','240,000₮'],
+    ans:1,
+    ex:'I = 500,000 × 0.08 × 6/12 = 500,000 × 0.04 = 20,000₮'
+  },
+  {
+    cat:1,
+    q:'200,000₮-г 12%-ийн хүүтэй 1 жил хадгаллаа. Нийт авах дүн хэд вэ?',
+    opts:['202,400₮','212,000₮','224,000₮','232,000₮'],
+    ans:2,
+    ex:'F = P × (1 + R×T) = 200,000 × 1.12 = 224,000₮'
+  },
+  {
+    cat:1,
+    q:'Болд сард 50,000₮ хадгалдаг. 12 сарын дараа хүүгүй тооцоход нийт хэд болох вэ?',
+    opts:['50,000₮','150,000₮','600,000₮','5,000,000₮'],
+    ans:2,
+    ex:'50,000₮ × 12 сар = 600,000₮. Хүүтэй бол үүнээс илүү болно!'
+  },
+  {
+    cat:1,
+    q:'1,000,000₮-г 12.5%-ийн хүүтэй 2 жил хадгаллаа. Хүүний дүн хэд вэ?',
+    opts:['12,500₮','125,000₮','250,000₮','1,250,000₮'],
+    ans:2,
+    ex:'I = 1,000,000 × 0.125 × 2 = 250,000₮. Ийм их хүү авахын тулд 24 сарын хугацаатай хийх хэрэгтэй!'
+  },
+  {
+    cat:1,
+    q:'3 жилийн дараа 900,000₮ хуримтлуулахын тулд сард хэдийг хадгалах шаардлагатай вэ? (хүүгүй)',
+    opts:['10,000₮','25,000₮','90,000₮','300,000₮'],
+    ans:1,
+    ex:'900,000₮ ÷ 36 сар = 25,000₮/сар. Хүүтэй бол арай бага хадгалсан ч хүрнэ!'
+  },
+  {
+    cat:1,
+    q:'Ердийн хүүгийн томьёо аль нь вэ?',
+    opts:['I = P + R + T','I = P × R × T / 12','I = P / (R × T)','I = √(P × R × T)'],
+    ans:1,
+    ex:'I = P × R × T / 12 — Үндсэн дүн, хүүний хувь, хугацааны (сараар) үржвэр. Файлд бичсэн адил!'
+  },
+
+  // --- 🧠 УХААЛАГ ШИЙДВЭР ---
+  {
+    cat:2,
+    q:'Аль нь санхүүгийн БУРУУ шийдвэр вэ?',
+    opts:['Сар бүр тогтмол хадгалах','Гэнэтийн зардалд нөөц барих','Ирэх сарын цалинг урьдчилан зарцуулах','Хугацаатай хадгаламж ашиглах'],
+    ans:2,
+    ex:'Ирэх сарын мөнгийг урьдчилан зарцуулах бол "санхүүгийн гулсалт" — хохирол цааш цааш нэмэгдэнэ.'
+  },
+  {
+    cat:2,
+    q:'Дэлгүүрт тийм ч хэрэгтэй биш зүйл харагдлаа. Хамгийн ухаалаг шийдвэр аль вэ?',
+    opts:['Тэр дор нь карт шударна','Найзаасаа зээлнэ','24 цаг хүлээж бод — дараа нь шийдэ','Эцэг эхдээ тавьна'],
+    ans:2,
+    ex:'"24 цагийн дүрэм" — импульсийн худалдан авалтаас хамгаалдаг хамгийн үр дүнтэй арга.'
+  },
+  {
+    cat:2,
+    q:'6 сарын дараа том зардал гарахаар байна. Хадгаламжийн аль төрөл сонгох вэ?',
+    opts:['24 сарын хугацаатай','6 сарын хугацаатай (10%)','Харилцах данс (1.2%)','Бэлэн мөнгөөр гэртээ'],
+    ans:1,
+    ex:'Хугацааг зорилготойгоо тааруулах нь чухал! 6 сар = 6 сарын хадгаламж. 24 сарын хийвэл авч чадахгүй.'
+  },
+  {
+    cat:2,
+    q:'Сарын орлогынхоо хэдийг хуримтлуулах нь зохистой вэ?',
+    opts:['0–5%','10–30%','50–70%','100%'],
+    ans:1,
+    ex:'Мэргэжилтнүүд орлогын 10–30%-г хадгалахыг зөвлөдөг. Бага боловч тогтмол байх нь чухал.'
+  },
+  {
+    cat:2,
+    q:'"Хэрэгцээ" болон "хүсэл"-ийн ялгааг мэддэг үү? — СУРГУУЛИЙН НОМ ДЭВТЭР:',
+    opts:['Хүсэл — авахгүй байж болно','Хэрэгцээ — заавал хэрэгтэй','Аль ч байж болно','Зөвхөн үнэтэй бол хэрэгцээ'],
+    ans:1,
+    ex:'Сургуулийн ном дэвтэр бол хэрэгцээ — сурахын тулд заавал шаардлагатай зүйл. Хүсэл бол "байвал сайн" зүйл.'
+  },
+  {
+    cat:2,
+    q:'Анар 3 жилийн дараа 900,000₮-ын унадаг дугуй авмаар байна. Аль шийдвэр хамгийн ухаалаг вэ?',
+    opts:['Одоо авч, дараа нь хэмнэнэ','Зарж болох зүйлсийнхээ дүнийг нэмж авна','Сар бүр 25,000₮ хадгалж эхэлнэ','Эцэг эхийнхээ мөнгийг ашиглана'],
+    ans:2,
+    ex:'25,000₮ × 36 сар = 900,000₮. Тогтмол жижиг хадгаламж нь хамгийн найдвартай арга!'
+  },
+  {
+    cat:2,
+    q:'Гэнэт 200,000₮ гарт орлоо. Аль нь хамгийн БУРУУ шийдвэр вэ?',
+    opts:['Хугацаатай хадгаламжид хийнэ','Нөөц санд нэмнэ','Бүгдийг нэг дор нүүр будагт зарцуулна','Хэсгийг зарцуулж, хэсгийг хадгална'],
+    ans:2,
+    ex:'Гэнэт орсон мөнгийг бүхлээр нь тэр дор зарцуулах нь импульсийн худалдан авалт — санхүүгийн хамгийн том алдаа.'
+  },
+
+  // --- 🏛️ МӨНГИЙН ЕРТӨНЦ ---
+  {
+    cat:3,
+    q:'Монголбанкны үндсэн зорилго юу вэ?',
+    opts:['Иргэдэд шууд зээл олгох','Татвар цуглуулах','Төгрөгийн тогтвортой байдлыг хангах','Байшин барих'],
+    ans:2,
+    ex:'Монголбанк нь "бодлогын хүү"-гээр дамжуулан мөнгөний нийлүүлэлтийг зохицуулж, төгрөгийг тогтворжуулдаг.'
+  },
+  {
+    cat:3,
+    q:'"Бодлогын хүү" гэж юу вэ?',
+    opts:['Тухайн банкны нийт хүүний дүн','Монголбанкаас тогтоодог мөнгөний үндсэн хүүний хувь','Хадгаламжийн дундаж хүү','Засгийн газрын татварын хувь'],
+    ans:1,
+    ex:'Монголбанк бодлогын хүүг нэмбэл хадгаламжийн хүү өсдөг, бууруулбал буурдаг — иргэдийн данстай шууд холбоотой!'
+  },
+  {
+    cat:3,
+    q:'Банк яагаад "санхүүгийн гүүр" гэгддэг вэ?',
+    opts:['Гол мөрний дагуу байдаг учраас','Мөнгөтэй хүнээс мөнгийг нь аваад, хэрэгтэй хүнд хүргэдэг учраас','Засгийн газрын хэсэг учраас','Валют арилжаалдаг учраас'],
+    ans:1,
+    ex:'Хадгаламж эзэмшигч мөнгийг банкинд өгнэ → Банк тэр мөнгийг зээлдэгчид өгнэ. Ийнхүү "гүүр" үүрэг гүйцэтгэнэ.'
+  },
+  {
+    cat:3,
+    q:'"Нийлмэл хүү" гэж яагаад хүчтэй гэдэг вэ?',
+    opts:['Хоёр банкнаас нэгдэн авдаг учраас','Хүү дээр дахин хүү нэмэгдэж цаг хугацааны хамт эрчимтэй өсдөг учраас','Нийт хадгаламжийн дүн ихэсдэг учраас','Тогтмол хэмжээгээр нэмэгдэх учраас'],
+    ans:1,
+    ex:'Жишээ: 100,000₮ → 1-р жил: 110,000₮ → 2-р жил: 121,000₮ (энгийн бол 120,000₮). Цаг хугацаа өнгөрөх тусам ялгаа асар том болдог!'
+  },
+  {
+    cat:3,
+    q:'"Төсвийн бодлого" хэн хариуцдаг вэ? Ямар хэрэгсэл ашигладаг вэ?',
+    opts:['Монголбанк — бодлогын хүү','Засгийн газар — татвар, зардал','Иргэд — хадгаламж','Банкууд — зээлийн хүү'],
+    ans:1,
+    ex:'Засгийн газар татвар, нийгмийн зарлагаар (төсвийн бодлого) эдийн засгийг зохицуулдаг. Монголбанк бол мөнгөний бодлого.'
+  },
+  {
+    cat:3,
+    q:'"Зээл" болон "хадгаламж"-ийн зохистой тодорхойлолт аль нь вэ?',
+    opts:['Хоёул ижил, зөвхөн нэр нь ялгаатай','Зээл = банкнаас авах (хүү төлнөсүүд); хадгаламж = банкинд өгөх (хүү авна)','Хадгаламж = банкнаас авах','Зөвхөн зээлд хүү тооцдог'],
+    ans:1,
+    ex:'Банкинд мөнгө тавих → чи хүү АВНА. Банкнаас мөнгө зээлэх → чи хүү ТӨЛНӨ. Энэ бол банкны гол ажиллагаа.'
+  },
+];
+
+/* ============ Game State ============ */
+let G = {};
+
+function initState(){
+  G = {
+    questions: shuffle([...QUESTIONS]),
+    idx: 0,
+    score: 0,
+    lives: 3,
+    streak: 0,
+    maxStreak: 0,
+    correct: 0,
+    totalInterest: 0,
+    timerInterval: null,
+    timeLeft: 150, // 150 × 100ms = 15s
+    locked: false,
+    wrongList: [],
+    catWrong: {0:0,1:0,2:0,3:0},
+    catTotal: {0:0,1:0,2:0,3:0},
+  };
+}
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+/* ============ Screens ============ */
+function show(id){
+  ['intro','countdown','game','end'].forEach(s=>{
+    document.getElementById(s).classList.toggle('hidden', s!==id);
+  });
+}
+
+/* ============ Countdown ============ */
+function startCountdown(){
+  show('countdown');
+  const el = document.getElementById('cd-display');
+  let n = 3;
+  el.className = 'cd-num';
+  el.textContent = n;
+  const iv = setInterval(()=>{
+    n--;
+    if(n<=0){
+      clearInterval(iv);
+      el.textContent='АМЖИЛТ ХҮСЬЕ!';
+      el.className='cd-go';
+      setTimeout(startGame, 900);
+    } else {
+      el.textContent = n;
+      el.className='';
+      void el.offsetWidth;
+      el.className='cd-num';
+    }
+  }, 900);
+}
+
+/* ============ Name + Archive ============ */
+const ARC_KEY = 'hurdan_uhan_scores';
+
+function tryStart(){
+  const name = document.getElementById('player-name').value.trim();
+  if(!name){
+    const inp = document.getElementById('player-name');
+    inp.style.borderColor = 'var(--red)';
+    inp.placeholder = 'Эхлэхийн өмнө нэрээ оруулаарай!';
+    inp.focus();
+    setTimeout(()=>{ inp.style.borderColor=''; inp.placeholder='Нэрээ оруулна уу…'; }, 2000);
+    return;
+  }
+  G.playerName = name;
+  startCountdown();
+}
+
+function saveScore(name, score, rank, correct, total, streak){
+  const rec = { name, score, rank, correct, total, streak,
+    date: new Date().toLocaleDateString('mn-MN') };
+  try{
+    const arr = JSON.parse(localStorage.getItem(ARC_KEY)||'[]');
+    arr.push(rec);
+    arr.sort((a,b)=>b.score - a.score);
+    localStorage.setItem(ARC_KEY, JSON.stringify(arr.slice(0,50)));
+  } catch(e){}
+}
+
+function openArchive(){
+  const overlay = document.getElementById('arc-overlay');
+  const body = document.getElementById('arc-body');
+  overlay.classList.remove('hidden');
+  try{
+    const arr = JSON.parse(localStorage.getItem(ARC_KEY)||'[]');
+    if(!arr.length){
+      body.innerHTML = '<div class="arc-empty"><span class="em">📭</span>Архив хоосон байна.<br>Тоглоомоо тоглоод эхэл!</div>';
+      return;
+    }
+    body.innerHTML = arr.map((r,i)=>`
+      <div class="arc-row">
+        <span class="arc-pos ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</span>
+        <div>
+          <div class="arc-name">${r.name}</div>
+          <div class="arc-date">${r.date} · 🔥${r.streak} цуваа</div>
+        </div>
+        <span class="arc-correct">${r.correct}/${r.total}</span>
+        <span class="arc-score-col">${r.score.toLocaleString()}</span>
+        <span class="arc-rank-col r${r.rank}">${r.rank}</span>
+      </div>
+    `).join('');
+  } catch(e){
+    body.innerHTML = '<div class="arc-empty"><span class="em">⚠️</span>Архив уншиж чадсангүй.</div>';
+  }
+}
+
+function closeArchive(e){
+  if(!e || e.target === document.getElementById('arc-overlay') || !e.target)
+    document.getElementById('arc-overlay').classList.add('hidden');
+}
+
+function clearArchive(){
+  if(!confirm('Архивийн бүх оноог устгах уу?')) return;
+  try{ localStorage.removeItem(ARC_KEY); } catch(e){}
+  document.getElementById('arc-body').innerHTML =
+    '<div class="arc-empty"><span class="em">🗑️</span>Архив цэвэрлэгдлээ.</div>';
+}
+
+/* ============ Game start ============ */
+function startGame(){
+  initState();
+  show('game');
+  renderLives();
+  loadQuestion();
+}
+
+function renderLives(){
+  const el = document.getElementById('lives');
+  el.innerHTML = '';
+  for(let i=0;i<3;i++){
+    const h = document.createElement('span');
+    h.className = 'heart' + (i >= G.lives ? ' dead' : '');
+    h.textContent = '❤️';
+    el.appendChild(h);
+  }
+}
+
+/* ============ Load question ============ */
+function loadQuestion(){
+  if(G.idx >= G.questions.length){ endGame(); return; }
+  const q = G.questions[G.idx];
+  G.locked = false;
+  // Restore interactivity fresh — prevents hover bleed from prev question
+  const wrap = document.getElementById('answers');
+  wrap.style.pointerEvents = '';
+  wrap.innerHTML = '';
+
+  // Category
+  const catEl = document.getElementById('q-cat');
+  const cat = CATS[q.cat];
+  catEl.className = 'q-category ' + cat.cls;
+  catEl.textContent = cat.name;
+
+  // Number
+  document.getElementById('q-num').textContent = `${G.idx+1}/${G.questions.length}`;
+
+  // Question text
+  document.getElementById('q-text').innerHTML = q.q.replace(/\n/g,'<br>');
+
+  // Answers
+  const labels = ['A','B','C','D'];
+  q.opts.forEach((opt,i)=>{
+    const btn = document.createElement('button');
+    btn.className='ans-btn';
+    btn.innerHTML = `<span class="ans-letter">${labels[i]}</span><span class="ans-text">${opt}</span>`;
+    btn.onclick = ()=>answer(i);
+    wrap.appendChild(btn);
+  });
+
+  // Timer
+  startTimer();
+}
+
+/* ============ Timer ============ */
+function startTimer(){
+  clearInterval(G.timerInterval);
+  G.timeLeft = 400; // 40 seconds × 10
+  updateTimerBar();
+  G.timerInterval = setInterval(()=>{
+    G.timeLeft--;
+    updateTimerBar();
+    if(G.timeLeft <= 0){
+      clearInterval(G.timerInterval);
+      if(!G.locked) timeOut();
+    }
+  }, 100);
+}
+
+function updateTimerBar(){
+  const pct = G.timeLeft / 400 * 100;
+  const bar = document.getElementById('timer-bar');
+  const lbl = document.getElementById('timer-label');
+  bar.style.width = pct + '%';
+  const secs = Math.ceil(G.timeLeft / 10);
+  lbl.textContent = secs;
+  bar.className = 'timer-bar' + (pct < 33 ? ' danger' : pct < 60 ? ' warn' : '');
+}
+
+/* ============ Answer ============ */
+function answer(chosen){
+  if(G.locked) return;
+  G.locked = true;
+  clearInterval(G.timerInterval);
+
+  // Prevent hover bleed on next question
+  document.getElementById('answers').style.pointerEvents = 'none';
+
+  const q = G.questions[G.idx];
+  const buttons = document.querySelectorAll('.ans-btn');
+  buttons.forEach(b=>{ b.disabled=true; b.blur(); });
+
+  const isCorrect = chosen === q.ans;
+  G.catTotal[q.cat]++;
+
+  // Highlight correct answer
+  buttons[q.ans].classList.add('correct');
+  if(!isCorrect){
+    buttons[chosen].classList.add('wrong');
+    G.wrongList.push(q);
+    G.catWrong[q.cat]++;
+  }
+
+  // Show explanation
+  if(q.ex){
+    document.getElementById('ex-text').textContent = q.ex;
+    document.getElementById('explanation').classList.add('show');
+  }
+
+  if(isCorrect){
+    G.correct++;
+    G.streak++;
+    if(G.streak > G.maxStreak) G.maxStreak = G.streak;
+
+    // Score
+    const timeBonus = Math.floor(G.timeLeft / 400 * 150);
+    const streakBonus = Math.min(G.streak - 1, 10) * 15;
+    const pts = 100 + timeBonus + streakBonus;
+    G.score += pts;
+
+    showFloatScore('+' + pts, 'pos');
+    flashScreen('correct');
+    updateScore();
+
+    // Streak combos
+    if(G.streak===3) showCombo('🔥','ГУРАВ ДАРААЛСАН!','Сайн байна! Цааш үргэлж!');
+    else if(G.streak===5) showCombo('💥','ТАВ ДАРААЛСАН!','Ноцтой тоглогч!');
+    else if(G.streak===8) showCombo('⚡','НАЙМ ДАРААЛСАН!','Гайхалтай!');
+    else if(G.streak===12) showCombo('🌟','АРВАН ХОЁ!','Чи аварга мөнгөний мэргэжилтэн!');
+  } else {
+    G.streak = 0;
+    G.lives--;
+    renderLives();
+    flashScreen('wrong');
+    showFloatScore('−АМЬ', 'neg');
+    // Shake
+    document.getElementById('game').style.animation='none';
+    void document.getElementById('game').offsetWidth;
+  }
+
+  updateStreak();
+
+  // Next question or end
+  const delay = q.ex ? 2200 : 1400;
+  setTimeout(()=>{
+    if(G.lives <= 0){ endGame(); return; }
+    G.idx++;
+    loadQuestion();
+  }, delay);
+}
+
+function timeOut(){
+  if(G.locked) return;
+  G.locked = true;
+  document.getElementById('answers').style.pointerEvents = 'none';
+  G.streak = 0;
+  G.lives--;
+  renderLives();
+  updateStreak();
+  flashScreen('wrong');
+  showFloatScore('⏱️ ХОЦ', 'neg');
+
+  const q = G.questions[G.idx];
+  const buttons = document.querySelectorAll('.ans-btn');
+  buttons.forEach(b=>{ b.disabled=true; b.blur(); });
+  buttons[q.ans].classList.add('correct');
+  G.wrongList.push(q);
+  G.catTotal[q.cat]++;
+  G.catWrong[q.cat]++;
+
+  if(q.ex){
+    document.getElementById('ex-text').textContent = q.ex;
+    document.getElementById('explanation').classList.add('show');
+  }
+
+  setTimeout(()=>{
+    if(G.lives <= 0){ endGame(); return; }
+    G.idx++;
+    loadQuestion();
+  }, 2000);
+}
+
+/* ============ UI helpers ============ */
+function updateScore(){
+  const el = document.getElementById('hud-score');
+  el.textContent = G.score.toLocaleString();
+  el.classList.remove('bump');
+  void el.offsetWidth;
+  el.classList.add('bump');
+  setTimeout(()=>el.classList.remove('bump'), 200);
+}
+
+function updateStreak(){
+  const el = document.getElementById('streak-display');
+  el.textContent = '🔥 ' + G.streak + ' цуваа';
+  el.className = 'streak' + (G.streak >= 3 ? ' hot' : '');
+}
+
+function flashScreen(type){
+  const el = document.getElementById('flash');
+  el.className = 'feedback-flash ' + type + ' show';
+  setTimeout(()=>el.classList.remove('show'), 350);
+}
+
+function showFloatScore(text, cls){
+  const el = document.createElement('div');
+  el.className = 'float-score ' + cls;
+  el.textContent = text;
+  el.style.left = (40 + Math.random()*30) + '%';
+  el.style.top = '30%';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 1500);
+}
+
+function showCombo(em, text, sub){
+  const banner = document.getElementById('combo');
+  document.getElementById('combo-em').textContent = em;
+  document.getElementById('combo-text').textContent = text;
+  document.getElementById('combo-sub').textContent = sub;
+  banner.classList.add('show');
+  setTimeout(()=>banner.classList.remove('show'), 2000);
+}
+
+/* ============ End game ============ */
+const TITLES = [
+  {minPct:0,   em:'🌱', name:'Санхүүгийн ноёт',        badgeClass:'badge-D'},
+  {minPct:0.2, em:'🪙', name:'Зоосны сонирхогч',        badgeClass:'badge-D'},
+  {minPct:0.4, em:'💳', name:'Хадгаламжийн шавь',       badgeClass:'badge-C'},
+  {minPct:0.56,em:'📊', name:'Санхүүгийн оюутан',       badgeClass:'badge-C'},
+  {minPct:0.68,em:'💰', name:'Мөнгөний ухагч',          badgeClass:'badge-B'},
+  {minPct:0.80,em:'🏦', name:'Банкны нэр дэвшигч',      badgeClass:'badge-A'},
+  {minPct:0.92,em:'👑', name:'Монголбанкны зөвлөх',     badgeClass:'badge-S'},
+];
+
+const CAT_ADVICE = [
+  {cat:0, em:'💰', label:'Хадгаламж', advice:'Харилцах, хугацаагүй, хугацаатай хадгаламжийн ялгааг давтаарай.'},
+  {cat:1, em:'🧮', label:'Тооцоо',    advice:'I = P × R × T / 12 томьёогоор бодох дадлага хийгээрэй.'},
+  {cat:2, em:'🧠', label:'Ухаалаг шийдвэр', advice:'24 цагийн дүрэм, нөөц сан, сарын хуримтлалын дүрмийг санаарай.'},
+  {cat:3, em:'🏛️', label:'Мөнгийн ертөнц', advice:'Монголбанк, бодлогын хүү, банкны "санхүүгийн гүүр" үүргийг давтаарай.'},
+];
+
+function endGame(){
+  clearInterval(G.timerInterval);
+  show('end');
+
+  const total = G.questions.length;
+  const pct = G.correct / total;
+
+  let rank, title;
+  if(pct >= .92 && G.score >= 3000){ rank='S'; title='Гайхалтай! Чи санхүүгийн жинхэнэ аварга!' }
+  else if(pct >= .80){ rank='A'; title='Маш сайн тоглолоо! Санхүүгийн мэдлэг тань өндөр.' }
+  else if(pct >= .64){ rank='B'; title='Сайн тоглолоо! Цаашид дадлагажвал A авна.' }
+  else if(pct >= .48){ rank='C'; title='Эхлэл сайн байна. Алдсан сэдвүүдийг давт.' }
+  else { rank='D'; title='Дахин оролдоорой! Тоглох тусам мэдлэг нэмэгдэнэ.' }
+
+  // Financial title
+  let titleObj = TITLES[0];
+  for(const t of TITLES){ if(pct >= t.minPct) titleObj = t; }
+
+  // Render rank
+  const rankEl = document.getElementById('end-rank');
+  rankEl.textContent = rank;
+  rankEl.className = 'end-rank rank-' + rank;
+  document.getElementById('end-title').textContent = title;
+
+  // Badge
+  const badge = document.getElementById('end-badge');
+  badge.className = 'end-badge ' + titleObj.badgeClass;
+  badge.textContent = titleObj.em + ' ' + titleObj.name;
+
+  // Stats
+  document.getElementById('es-score').textContent = G.score.toLocaleString();
+  document.getElementById('es-correct').textContent = G.correct + '/' + total;
+  document.getElementById('es-streak').textContent = G.maxStreak;
+
+  // Lessons panel
+  const lessonsEl = document.getElementById('end-lessons');
+
+  if(G.wrongList.length === 0){
+    lessonsEl.innerHTML = `<h4>Дүгнэлт</h4>
+      <div class="lesson-row"><span class="icon">🌟</span><span>Бүх асуултанд зөв хариуллаа! Чи санхүүгийн жинхэнэ мэргэжилтэн болсон байна.</span></div>`;
+  } else {
+    // Find weak categories (wrong rate > 40%)
+    const weakCats = CAT_ADVICE.filter(c =>
+      G.catTotal[c.cat] > 0 && G.catWrong[c.cat] / G.catTotal[c.cat] >= 0.4
+    );
+
+    let html = '';
+    if(weakCats.length > 0){
+      html += '<h4>📚 Эдгээр сэдвийг сайн бэлдээрэй</h4>';
+      html += weakCats.map(c => {
+        const wrongN = G.catWrong[c.cat];
+        const totalN = G.catTotal[c.cat];
+        return `<div class="lesson-row">
+          <span class="icon">${c.em}</span>
+          <span><b>${c.label}</b> — ${totalN} асуултаас ${wrongN}-г алдлаа.<br>${c.advice}</span>
+        </div>`;
+      }).join('');
+    } else {
+      // Show wrong answers as before
+      html += '<h4>Алдсан асуулт — давт</h4>';
+      html += G.wrongList.slice(0,3).map(q => `
+        <div class="lesson-row">
+          <span class="icon">${CATS[q.cat].name.split(' ')[0]}</span>
+          <span><b>${q.q.split('\n')[0].slice(0,55)}…</b><br>Зөв хариулт: ${q.opts[q.ans]}</span>
+        </div>
+      `).join('');
+    }
+    lessonsEl.innerHTML = html;
+  }
+
+  // Save to archive
+  saveScore(G.playerName || 'Тоглогч', G.score, rank, G.correct, total, G.maxStreak);
+
+  // S/A rank confetti
+  if(rank === 'S' || rank === 'A') launchConfetti();
+}
+
+/* ============ Confetti ============ */
+function launchConfetti(){
+  const colors=['#FFD600','#00E87A','#FF3355','#00C8FF','#B17DFF','#FF8C40'];
+  for(let i=0;i<60;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.style.cssText=`position:fixed;width:${6+Math.random()*8}px;height:${12+Math.random()*10}px;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        left:${10+Math.random()*80}%;top:-20px;z-index:500;border-radius:2px;
+        animation:confettiFall ${1.5+Math.random()*1.5}s ease-out forwards;
+        transform:rotate(${Math.random()*360}deg)`;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),3000);
+    }, i*40);
+  }
+}
+const confettiStyle=document.createElement('style');
+confettiStyle.textContent='@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}';
+document.head.appendChild(confettiStyle);
+
+/* ============ Utils ============ */
+function restart(){
+  show('intro');
+  // keep name in input
+  if(G.playerName) document.getElementById('player-name').value = G.playerName;
+}
+
+function copyScore(){
+  const name = G.playerName || 'Тоглогч';
+  const rank = document.getElementById('end-rank').textContent;
+  const score = document.getElementById('es-score').textContent;
+  const correct = document.getElementById('es-correct').textContent;
+  const streak = document.getElementById('es-streak').textContent;
+  const text = `⚡ ХУРДАН УХААН\n👤 Тоглогч: ${name}\n🏆 Зэрэглэл: ${rank}\n⭐ Оноо: ${score}\n✅ Зөв: ${correct}\n🔥 Цуваа: ${streak}\n\nЧи ч тоглоорой!`;
+  navigator.clipboard?.writeText(text).then(()=>alert('Оноо хуулагдлаа!')).catch(()=>alert(text));
+}
+</script>
+</body>
+</html>
